@@ -1,0 +1,7 @@
+[local]
+localhost
+
+[coreos-cluster]
+core-01
+core-02
+core-03
