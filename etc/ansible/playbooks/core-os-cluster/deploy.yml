@@ -2,5 +2,6 @@
 - hosts: coreos-cluster
   vars_files:
     - 'vars.yml'
+      'secure.yml'
   tasks:
     - include: 'tasks/testing.yml'
