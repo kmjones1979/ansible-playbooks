@@ -2,7 +2,7 @@
 
 FROM centos:centos7
 
-MAINTAINER Toshio Kuratomi <tkuratomi@ansible.com>
+MAINTAINER Kevin Jones <kevin@nginx.com>
 
 # install dependencies
 RUN yum clean all && \
@@ -16,3 +16,5 @@ ADD etc/ansible /etc/ansible
 # install Ansible
 RUN pip install ansible
 
+# install coreos bootstrap role
+RUN ansible-galaxy install defunctzombie.coreos-bootstrap

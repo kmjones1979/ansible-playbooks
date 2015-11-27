@@ -2,5 +2,6 @@
   gather_facts: False
   roles:
     - defunctzombie.coreos-bootstrap
-  name: Bootstrap check
-    - shell: echo "Yes" > /etc/coreos/bootstrap
+  tasks:
+    - name: Bootstrap check
+      shell: echo "Yes" > /etc/coreos/bootstrap

@@ -1,7 +1,7 @@
 [coreos-cluster]
-core-01
-core-02
-core-03
+172.17.8.101
+172.17.8.102
+172.17.8.103
 
 [coreos-cluster:vars]
 ansible_ssh_user=core
