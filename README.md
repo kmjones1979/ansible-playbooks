@@ -1,13 +1,21 @@
 # Ansible in Docker
 
+This contains an Dockerfile for Ansible inside of a docker container and also
+serves as a static place to keep all Ansible playbooks.
+
 ### Setup
 
-You will need to ensure that this container is executed with any private keys
-needed to deploy mounted inside /tmp on the docker host. This can be done by
-creating a symlink to your private key and attaching the volume at container
-runtime. See run.sh for details.
+Build
+```
+docker build --no-cache -t docker-ansible .
+```
 
+Run
 ```
-Kevins-MacBook-Pro-3:docker-ansible kjones$ ls -l .vagrant.d/
-lrwxr-xr-x   1 kjones  staff   45 Nov 26 10:59 insecure_private.key@ -> /Users/kjones/.vagrant.d/insecure_private_key
+docker run -i -t --rm \
+  --name docker-ansible docker-ansible \
 ```
+
+### Playbooks
+
+Playbooks are located in /etc/ansible/playbooks.
