@@ -1,6 +1,12 @@
 ---
-- hosts: coreos-cluster
+- hosts: localhost
+  remote_user: vagrant
   vars_files:
-    - 'vars.yml'
-  tasks:
-    - include: 'tasks/test.yml'
+    - 'roles/localhost/vars/vars.yml'
+  roles:
+    - localhost
+- hosts: coreos-cluster
+  remote_user: core
+  sudo: yes
+  roles:
+    - test
