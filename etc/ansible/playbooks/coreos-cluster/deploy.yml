@@ -1,12 +1,18 @@
 ---
 - hosts: localhost
   remote_user: vagrant
+  sudo: yes
   vars_files:
-    - 'roles/localhost/vars/vars.yml'
+    - 'roles/users/vars/vars.yml'
   roles:
-    - localhost
+    - users
+- hosts: localhost
+  remote_user: core
+  vars_files:
+    - 'roles/ssh_keys/vars/vars.yml'
+  roles:
+    - ssh_keys
 - hosts: coreos-cluster
   remote_user: core
-  sudo: yes
   roles:
     - test

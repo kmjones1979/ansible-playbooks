@@ -1,0 +1,4 @@
+---
+ - name: Create core User Account
+   user: name=core password={{ core_passwd }} comment="coreos deployment account"
+

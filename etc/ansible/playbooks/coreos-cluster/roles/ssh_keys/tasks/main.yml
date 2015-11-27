@@ -1,0 +1,12 @@
+---
+ - name: Drop Private Key
+   local_action: copy content={{ ssl_key }} dest=/tmp/insecure_private.key
+
+ - name: Secure Private Key
+   file: path=/tmp/insecure_private.key owner=vagrant mode=0700
+
+ - name: Start SSH Agent and Add Private Key
+   shell: /usr/bin/ssh-agent /bin/bash && eval $(ssh-agent) && ssh-add /tmp/insecure_private.key
+
+ #- name: Remove Private Key
+ #  shell: shred --iterations=10 -uzfv /tmp/insecure_private.key
