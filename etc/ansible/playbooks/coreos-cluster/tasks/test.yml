@@ -4,4 +4,4 @@
   shell: "/bin/echo Hello World!"
 
 - name: Certificate Variable Test
-  debug: "{{ ssl_cert }}"
+  debug: var={{ ssl_key }}

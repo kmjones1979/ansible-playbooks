@@ -4,4 +4,4 @@
     - defunctzombie.coreos-bootstrap
   tasks:
     - name: Bootstrap check
-      shell: echo "Yes" > /etc/coreos/bootstrap
+      shell: echo "Yes" > /home/core/.bootstrapped
