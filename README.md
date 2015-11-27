@@ -69,9 +69,11 @@ ansible-vault decrypt file
 As of right now Vagrant SSH keys will have to be manually added to your
 SSH agent after they are decrypted to your Ansible server.
 
-First ensure SSH Agent is running on your Ansible server
+First ensure SSH Agent is running on your Ansible server, if not then start
+it using eval.
 ```
 ps aux | grep ssh-agent
+eval $(ssh-agent)
 ```
 
 Then add your Vagrant private key.
