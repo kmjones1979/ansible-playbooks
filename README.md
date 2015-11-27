@@ -10,16 +10,17 @@ as instructions on how to setup Ansible inside Vagrant.
 Setup/Build
 ```
 git clone git@github.com:kmjones1979/vagrant-centos7.git && ./init.sh
-
 vagrant ssh 
 ```
 
-Inside Vagrant SSH
+Inside your CentOS 7 Vagrant box
+*Note: defunctzombie.coreos-bootstrap only needed for coreos ansible deployments - because coreos
+does not ship with python libraries installed*
 ```
 sudo yum clean all && \
     sudo yum -y install epel-release && \
     sudo yum -y install PyYAML python-jinja2 python-httplib2 python-keyczar python-paramiko python-setuptools git python-pip && \
-    sudo pip install ansible
+    sudo pip install ansible && sudo ansible-galaxy install defunctzombie.coreos-bootstrap
 ```
 
 Run
