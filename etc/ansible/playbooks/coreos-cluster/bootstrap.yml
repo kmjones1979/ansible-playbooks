@@ -2,6 +2,3 @@
   gather_facts: False
   roles:
     - defunctzombie.coreos-bootstrap
-  tasks:
-    - name: Bootstrap check
-      shell: echo "Yes" > /home/core/.bootstrapped

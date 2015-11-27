@@ -3,5 +3,9 @@
 - name: Hello World!
   shell: "/bin/echo Hello World!"
 
-- name: Certificate Variable Test
-  debug: var={{ ssl_key }}
+- name: Debug
+  debug: msg="Hello World!"
+
+#  can be used to check the value of a variable
+#- name: Certificate Variable Test
+#  debug: var={{ ssl_key }}
