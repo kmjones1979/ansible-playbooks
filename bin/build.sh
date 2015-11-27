@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build --no-cache -t docker-ansible .
+docker build --no-cache -t docker-ansible ../.
