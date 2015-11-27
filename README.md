@@ -14,8 +14,9 @@ vagrant ssh
 ```
 
 Inside your CentOS 7 Vagrant box
-*Note: defunctzombie.coreos-bootstrap only needed for coreos ansible deployments - because coreos
-does not ship with python libraries installed*
+
+<sub><sup>*Note: defunctzombie.coreos-bootstrap only needed for coreos ansible deployments - because coreos
+does not ship with python libraries installed*</sup></sub>
 ```
 sudo yum clean all && \
     sudo yum -y install epel-release && \
