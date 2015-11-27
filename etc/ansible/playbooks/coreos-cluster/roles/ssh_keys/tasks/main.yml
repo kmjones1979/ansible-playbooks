@@ -6,7 +6,7 @@
    file: path=/tmp/insecure_private.key owner=vagrant mode=0700
 
  - name: Start SSH Agent and Add Private Key
-   shell: /usr/bin/ssh-agent /bin/bash && eval $(ssh-agent) && ssh-add /tmp/insecure_private.key
+   shell: eval $(ssh-agent) && ssh-add /tmp/insecure_private.key
 
  #- name: Remove Private Key
  #  shell: shred --iterations=10 -uzfv /tmp/insecure_private.key
