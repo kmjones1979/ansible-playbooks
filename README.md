@@ -1,13 +1,20 @@
 # Ansible in Docker
 
-This contains an Dockerfile for Ansible inside of a docker container and also
-serves as a static place to keep all Ansible playbooks.
+This contains an Dockerfile for Ansible inside of a docker container as well
+as instructions on how to setup Ansible inside Vagrant.
 
 ### Setup
 
-#### For CentOS setup please follow the following steps.
+#### For setup inside a Vagrant CentOS box please follow the following steps.
 
 Setup/Build
+```
+git clone git@github.com:kmjones1979/vagrant-centos7.git && ./init.sh
+
+vagrant ssh 
+```
+
+Inside Vagrant SSH
 ```
 sudo yum clean all && \
     sudo yum -y install epel-release && \
