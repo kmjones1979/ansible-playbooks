@@ -27,7 +27,7 @@ spec:
     - /podmaster
     - --etcd-servers=http://172.17.8.101:4001,http://172.17.8.102:4001,http://172.17.8.103:4001
     - --key=controller
-    - --whoami=${ADVERTISE_IP}
+    - --whoami=172.17.8.101
     - --source-file=/src/manifests/kube-controller-manager.yaml
     - --dest-file=/dst/manifests/kube-controller-manager.yaml
     terminationMessagePath: /dev/termination-log

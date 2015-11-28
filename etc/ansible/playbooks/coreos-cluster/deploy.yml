@@ -24,10 +24,13 @@
     - 'roles/kubernetes-master/vars/vars.yml'
   roles:
     - kubernetes-master
-#- hosts: kubernetes-slave
-#  remote_user: core
-#  roles:
-#    - kubernetes-slave
+- hosts: kubernetes-slave
+  remote_user: core
+  sudo: yes
+  vars_files:
+    - 'roles/kubernetes-slave/vars/vars.yml'
+  roles:
+    - kubernetes-slave
 
 # DEBUG/TEST with this deployment
 #
