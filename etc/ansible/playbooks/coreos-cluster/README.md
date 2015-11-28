@@ -156,6 +156,11 @@ Variables used for reference... Deployment will require a vars.yml in both the
 kubernetes-master role and the kubernetes-slave role. It is reccomended to add the
 values below and encrypt the file with ansible-vault.
 
+Variable files examples will be placed in the following locations. Simply remove the .example
+extension, add your variable values and encrytp the files with amsible-vault.
+ - ../roles/kubernetes-master/vars/vars.yml.example
+ - ../roles/kubernetes-slave/vars/vars.yml.example
+
 ```
 * ../vars/vars.yml
 

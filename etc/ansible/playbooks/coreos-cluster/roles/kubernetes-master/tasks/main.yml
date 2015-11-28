@@ -67,3 +67,6 @@
 
   - name: Deploy Kubernetes Kube Podmaster Configuration
     template: src=dns-addon.yml dest=/home/core/dns-addon.yml
+
+  - name: Create DNS using kubectl
+    raw: command kubectl create -f /home/core/dns-addon.yml

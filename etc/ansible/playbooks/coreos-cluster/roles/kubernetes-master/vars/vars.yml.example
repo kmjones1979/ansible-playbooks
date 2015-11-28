@@ -1,0 +1,41 @@
+* ../vars/vars.yml
+
+# Kubernetes related variables
+MASTER_HOST:
+ETCD_ENDPOINTS:
+POD_NETWORK:
+SERVICE_IP_RANGE:
+K8S_SERVICE_IP:
+DNS_SERVICE_IP:
+ADVERTISE_IP:
+MASTER_IP:
+CA_CERT: "/etc/kubernetes/ssl/ca.pem"
+APISERVER_KEY: "/etc/kubernetes/ssl/apiserver-key.pem"
+APISERVER_CERT: "/etc/kubernetes/ssl/apiserver-key.pem"
+WORKER_KEY: "/etc/kubernetes/ssl/worker-key.pem"
+WORKER_CERT: "/etc/kubernetes/ssl/worker.pem"
+ADMIN_KEY: "/etc/kubernetes/ssl/admin-key.pem"
+ADMIN_CERT: "/etc/kubernetes/ssl/admin.pem"
+
+# SSL related variables
+ca_srl: <secret - not sure if this is ever needed again>
+ca_key_pem: |
+    "<insert KEY here>"
+ca_pem: |
+    "<insert KEY here>"
+worker_key_pem: |
+    "<insert KEY here>"
+worker_csr: |
+    "<insert KEY here>"
+worker_pem: |
+    "<insert KEY here>"
+admin_key_pem: |
+    "<insert KEY here>"
+admin_csr: |
+    "<insert KEY here>"
+admin_pem: |
+    "<insert KEY here>"
+apiserver_pem: |
+    "<insert KEY here>"
+apiserver_key_pem: |
+    "<insert KEY here>"
