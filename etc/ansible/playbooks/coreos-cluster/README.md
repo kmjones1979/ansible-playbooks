@@ -1,4 +1,4 @@
-# CoreOS / Kubernetes / Vagrant  Playbook
+# CoreOS / Kubernetes / Vagrant Ansible Playbook
 
 In this README I will give instructions to complete the following:
  - Setup an Ansible / CentOS Vagrant Box
@@ -8,11 +8,11 @@ In this README I will give instructions to complete the following:
 ### Vagrant Setup
 
 First you will need to setup both an Ansible server to deploy from 
-along with a CoreOS cluster to setup and congigure Kuberenetes.
+along with a CoreOS cluster to setup and congigure Kuberenetes on.
 
-#### Create Ansible Vagrant Box
+#### Create CentOS / Ansible Vagrant VM
 
-First provision a Vagrant server to install Ansible on.
+First provision a CentOS Vagrant server to install Ansible on.
 
 ```
 $ cd /path/to/creat/vagrant/box
@@ -106,7 +106,8 @@ More details: https://coreos.com/kubernetes/docs/latest/openssl.html
 
 Create a custom OpenSSL configuration.
 
-<sub>Note: The variables for IP.1 and IP.2 are explained below under "Variables" </sub>
+<sub>Note: The values for IP.1 and IP.2 need to be added to the configuration before 
+generating the certificate and keys, these values are explained below under "Variables" section. </sub>
 ```
 # ./openssl.cnf
 
