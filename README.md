@@ -11,9 +11,13 @@ This repository also contains a collection of useful playbooks.
 
 Setup/Build
 ```
-git clone git@github.com:kmjones1979/vagrant-centos7.git
+cd /path/to/setup/centos/vm/
 vagrant init centos/7; vagrant up --provider virtualbox
 vagrant up
+```
+
+Run
+```
 vagrant ssh
 ```
 
