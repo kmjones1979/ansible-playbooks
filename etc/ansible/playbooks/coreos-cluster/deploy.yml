@@ -13,6 +13,11 @@
   roles:
     - ssh_keys
 - hosts: coreos-cluster
+  gather_facts: False
+  remote_user: core
+  roles:
+    - defunctzombie.coreos-bootstrap 
+- hosts: coreos-cluster
   remote_user: core
   roles:
     - test
