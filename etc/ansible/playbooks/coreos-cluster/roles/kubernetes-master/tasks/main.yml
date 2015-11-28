@@ -51,7 +51,7 @@
     copy: content={{ admin_pem }} dest=/etc/kubernetes/ssl/admin.pem
 
   - name: Deploy Encrypted Admin Key (admin-key.pem)
-    copy: content={{ admin_key_pem }} dest=/etc/kubernetes/ssl/admine-key.pem
+    copy: content={{ admin_key_pem }} dest=/etc/kubernetes/ssl/admin-key.pem
 
   - name: Configure Kubernetes kubectl
     shell: kubectl config set-cluster vagrant --server={{ MASTER_IP }} --certificate-authority={{ CA_CERT }}
@@ -64,3 +64,6 @@
 
   - name: Configure Kubernetes kubectl
     shell: kubectl config use-context vagrant
+
+  - name: Deploy Kubernetes Kube Podmaster Configuration
+    template: src=dns-addon.yml dest=/home/core/dns-addon.yml

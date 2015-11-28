@@ -186,6 +186,59 @@ admin_pem: |
 ansible_eth1.ipv4.address
 ```
 
+### Ansible Deployment
+
+Clone the repository
+```
+git clone git@github.com:kmjones1979/docker-ansible.git
+```
+
+Edit the Ansible hosts file to include inventory.
+```
+vim etc/ansible/playbooks/coreos-cluster/inventory/hosts
+```
+
+Example hosts file...
+```
+# ./inventory/hosts
+
+coreos-cluster]
+172.17.8.101
+172.17.8.102
+172.17.8.103
+
+[coreos-cluster:vars]
+ansible_ssh_user=core
+ansible_python_interpreter="PATH=/home/core/bin:$PATH python"
+
+[kubernetes-master]
+172.17.8.101
+
+[kubernetes-master:vars]
+ansible_ssh_user=core
+ansible_python_interpreter="PATH=/home/core/bin:$PATH python"
+
+[kubernetes-slave]
+172.17.8.102
+172.17.8.103
+
+[kubernetes-slave:vars]
+ansible_ssh_user=core
+ansible_python_interpreter="PATH=/home/core/bin:$PATH python"
+```
+
+Deploy. 
+<sub>Tip: Use the flag -vvvv to troubleshoot Ansible deployment issues</sub>
+```
+cd etc/ansible/playbooks/coreos-cluster/ 
+ansible-playbook -i inventory/hosts deploy.yml --ask-vault-pass
+```
+
+Manually Deploy DNS Add-On
+```
+kubectl create -f /home/core/dns-addon.yml
+```
+
 ### API Examples
 
 Create Namespace
