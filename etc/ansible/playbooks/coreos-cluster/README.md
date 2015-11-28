@@ -184,21 +184,25 @@ ADMIN_CERT: "/etc/kubernetes/ssl/admin.pem"
 # SSL related variables
 ca_srl: <secret - not sure if this is ever needed again>
 ca_key_pem: |
-    "<insert KEY here>"
+    "<insert KEY DATA here>"
 ca_pem: |
-    "<insert KEY here>"
+    "<insert KEY DATA here>"
 worker_key_pem: |
-    "<insert KEY here>"
+    "<insert KEY DATA here>"
 worker_csr: |
-    "<insert KEY here>"
+    "<insert KEY DATA here>"
 worker_pem: |
-    "<insert KEY here>"
+    "<insert KEY DATA here>"
 admin_key_pem: |
-    "<insert KEY here>"
+    "<insert KEY DATA here>"
 admin_csr: |
-    "<insert KEY here>"
+    "<insert KEY DATA here>"
 admin_pem: |
-    "<insert KEY here>"
+    "<insert KEY DATA here>"
+apiserver_pem: |
+    "<insert KEY DATA here>"
+apiserver_key_pem: |
+    "<insert KEY DATA here>"
 
 # Ansible learned variables
 ansible_eth1.ipv4.address
