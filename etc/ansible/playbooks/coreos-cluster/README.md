@@ -2,10 +2,150 @@
 
 In this playbook I will deploy a 3 server CoreOS / Vagrant / Kubernetes cluster.
 
+### Vagrant Setup
+
+#### Create Ansible Vagrant Box
+
+First provision a Vagrant server to install Ansible on.
+
+```
+$ cd /path/to/creat/vagrant/box
+$ vagrant init centos/7; vagrant up --provider virtualbox
+```
+
+Install Ansible and dependencies
+
+```
+$ sudo yum clean all && \
+    sudo yum -y install epel-release && \
+    sudo yum -y install PyYAML python-jinja2 python-httplib2 python-keyczar python-paramiko python-setuptools git python-pip && \
+    sudo pip install ansible && sudo ansible-galaxy install defunctzombie.coreos-bootstrap
+```
+
+#### Create CoreOS Vagrant Cluster
+
+For more detailed instructions please visit the docs on the CoreOS
+site here: https://coreos.com/os/docs/latest/booting-on-vagrant.html
+
+First checkout the CoreOS Vagrant git repository.
+
+```
+$ git clone https://github.com/coreos/coreos-vagrant.git
+$ cd coreos-vagrant
+```
+
+Copy samples and edit with your configuration.
+
+```
+$ cp config.rb.sample config.rb
+$ cp user-data.sample user-data
+```
+
+Grab a discovery token.
+```
+$ curl -w "\n" 'https://discovery.etcd.io/new?size=3'
+https://discovery.etcd.io/0e72b94351a613bb8480ef02e2f19e87
+```
+
+Add the discovery token URL to the user-data file you copied.
+```
+# ./user-data
+discovery: https://discovery.etcd.io/<token>
+```
+
+Edit config.rb to have the proper number of instances in your cluster.
+```
+# ./config.rb
+# Size of the CoreOS cluster created by Vagrant
+$num_instances=3
+```
+
+Load up your CoreOS Vagrant cluster.
+```
+$ vagrant up
+```
+
+Check the status of the Vagrant cluster.
+```
+$ vagrant status
+Current machine states:
+
+core-01                   running (virtualbox)
+core-02                   running (virtualbox)
+core-03                   running (virtualbox)
+```
+
+Check SSH access.
+```
+$ vagrant ssh core-01
+
+Last login: Sat Nov 28 05:43:53 2015 from 172.17.8.1
+CoreOS alpha (870.3.0)
+core@core-01 ~ $ 
+```
+
+### SSL Keys
+
+Below are the commands needed to generate SSL certificates for this deployment.
+More details: https://coreos.com/kubernetes/docs/latest/openssl.html
+
+Create a custom OpenSSL configuration
+```
+# ./openssl.cnf
+
+[req]
+req_extensions = v3_req
+distinguished_name = req_distinguished_name
+[req_distinguished_name]
+[ v3_req ]
+basicConstraints = CA:FALSE
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+subjectAltName = @alt_names
+[alt_names]
+DNS.1 = kubernetes
+DNS.2 = kubernetes.default
+IP.1 = ${K8S_SERVICE_IP}
+IP.2 = ${MASTER_HOST}
+```
+
+Generate CA certificate and key
+```
+$ openssl genrsa -out ca-key.pem 2048
+$ openssl req -x509 -new -nodes -key ca-key.pem -days 10000 -out ca.pem -subj "/CN=kube-ca"
+```
+
+Generate API certificate and key
+```
+$ openssl genrsa -out apiserver-key.pem 2048
+$ openssl req -new -key apiserver-key.pem -out apiserver.csr -subj "/CN=kube-apiserver" -config openssl.cnf
+$ openssl x509 -req -in apiserver.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out apiserver.pem -days 365 -extensions v3_req -extfile openssl.cnf
+```
+
+Generate Worker certificate and key
+```
+$ openssl genrsa -out worker-key.pem 2048
+$ openssl req -new -key worker-key.pem -out worker.csr -subj "/CN=kube-worker"
+$ openssl x509 -req -in worker.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out worker.pem -days 365
+```
+
+Generate Admin certificate and key
+```
+$ openssl genrsa -out admin-key.pem 2048
+$ openssl req -new -key admin-key.pem -out admin.csr -subj "/CN=kube-admin"
+$ openssl x509 -req -in admin.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out admin.pem -days 365
+```
+
+Be sure to encrypt these values or store them in a secure location.
+
 ### Variables
 
-Variables used for reference...
+Variables used for reference... Deployment will require a vars.yml in both the
+kubernetes-master role and the kubernetes-slave role. It is reccomended to add the
+values below and encrypt the file with ansible-vault.
+
 ```
+* ../vars/vars.yml
+
 # Kubernetes related variables
 MASTER_HOST: "172.17.8.101"
 ETCD_ENDPOINTS: "http://172.17.8.101:4001,http://172.17.8.102:4001,http://172.17.8.103:4001"
@@ -46,60 +186,11 @@ admin_pem: |
 ansible_eth1.ipv4.address
 ```
 
-### SSL Keys
-
-Below are the commands needed to generate SSL certificates for this deployment.
-More details: https://coreos.com/kubernetes/docs/latest/openssl.html
-
-Creare custom OpenSSL configuration
-```
-# ./openssl.cnf
-
-[req]
-req_extensions = v3_req
-distinguished_name = req_distinguished_name
-[req_distinguished_name]
-[ v3_req ]
-basicConstraints = CA:FALSE
-keyUsage = nonRepudiation, digitalSignature, keyEncipherment
-subjectAltName = @alt_names
-[alt_names]
-DNS.1 = kubernetes
-DNS.2 = kubernetes.default
-IP.1 = ${K8S_SERVICE_IP}
-IP.2 = ${MASTER_HOST}
-```
-
-Generate CA certificate and key
-```
-$ openssl genrsa -out ca-key.pem 2048
-$ openssl req -x509 -new -nodes -key ca-key.pem -days 10000 -out ca.pem -subj "/CN=kube-ca"
-```
-
-Generate API server certificate and keys
-```
-$ openssl genrsa -out apiserver-key.pem 2048
-$ openssl req -new -key apiserver-key.pem -out apiserver.csr -subj "/CN=kube-apiserver" -config openssl.cnf
-$ openssl x509 -req -in apiserver.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out apiserver.pem -days 365 -extensions v3_req -extfile openssl.cnf
-```
-
-```
-$ openssl genrsa -out worker-key.pem 2048
-$ openssl req -new -key worker-key.pem -out worker.csr -subj "/CN=kube-worker"
-$ openssl x509 -req -in worker.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out worker.pem -days 365
-```
-
-```
-$ openssl genrsa -out admin-key.pem 2048
-$ openssl req -new -key admin-key.pem -out admin.csr -subj "/CN=kube-admin"
-$ openssl x509 -req -in admin.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out admin.pem -days 365
-```
-
 ### API Examples
 
 Create Namespace
 ```
-curl -XPOST -d'{"apiVersion":"v1","kind":"Namespace","metadata":{"name":"kube-system"}}' "http://127.0.0.1:8080/api/v1/namespaces"
+$ curl -XPOST -d'{"apiVersion":"v1","kind":"Namespace","metadata":{"name":"kube-system"}}' "http://127.0.0.1:8080/api/v1/namespaces"
 ```
 
 ### Troubleshooting and Debugging
@@ -122,7 +213,14 @@ $ curl -w '\n' http://127.0.0.1:8080/version
 
 Check kubelet service is running..
 ```
-systemctl status kubelet.service
+core@core-01 ~ $ systemctl status kubelet.service
+● kubelet.service
+   Loaded: loaded (/etc/systemd/system/kubelet.service; enabled; vendor preset: disabled)
+   Active: active (running) since Sat 2015-11-28 02:28:58 UTC; 3h 39min ago
+ Main PID: 609 (kubelet)
+   Memory: 64.7M
+      CPU: 5min 20.312s
+...
 ```
 
 ### References
