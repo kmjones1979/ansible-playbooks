@@ -1,0 +1,16 @@
+---
+ - name: Create Kubernetes SSL Directory
+   file: path=/etc/kubernetes/ssl state=directory
+
+ - name: Deploy Encrypted Certificate (ca.pem)
+   local_action: copy content={{ ca_pem }} dest=/etc/kubernetes/ssl/ca.pem
+
+ - name: Deploy Encrypted Certificate (apiserver.pem)
+   local_action: copy content={{ apiserver_pem }} dest=/etc/kubernetes/ssl/apiserver.pem
+
+ - name: Deploy Encrypted Certificate (apiserver-key.pem)
+   local_action: copy content={{ apiserver_key_pem }} dest=/etc/kubernetes/ssl/apiserver-key.pem
+
+ - name: Set Ownership and Permissions
+   file: path=/etc/kubernetes/ssl/*-key.pem owner=root mode=0600
+

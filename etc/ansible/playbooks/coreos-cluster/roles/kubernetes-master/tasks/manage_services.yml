@@ -1,0 +1,5 @@
+  - name: Perform Daemon Reload
+    shell: systemctl daemon-reload
+
+  - name: Start Kubelet Service
+    service: name=kubelet state=started enabled=yes

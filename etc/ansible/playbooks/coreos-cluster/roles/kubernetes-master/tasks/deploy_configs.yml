@@ -1,0 +1,19 @@
+  - name: Deploy Kubernetes Kubelet Service Configuration
+    copy: src=files/etc/systemd/system/kubelet.service dest=/etc/systemd/system/kubelet.service
+
+  - name: Deploy Kubernetes API Server Configuration
+    copy: src=files/etc/kubernetes/manifests/kube-apiserver.yaml dest=/etc/kubernetes/manifests/kube-apiserver.yaml
+
+  - name: Deploy Kubernetes Kube Proxy Configuration
+    copy: src=files/etc/kubernetes/manifests/kube-proxy.yaml dest=/etc/kubernetes/manifests/kube-proxy.yaml
+
+  - name: Deploy Kubernetes Kube Podmaster Configuration
+    copy: src=files/etc/kubernetes/manifests/kube-podmaster.yaml dest=/etc/kubernetes/manifests/kube-podmaster.yaml
+
+  - name: Deploy Kubernetes Kube Controller Manager Configuration
+    copy: src=files/srv/kubernetes/manifests/kube-controller-manager.yaml dest=/srv/kubernetes/manifests/kube-controller-manager.yaml
+
+  - name: Deploy Kubernetes Kube Scheduler Configuration
+    copy: src=files/srv/kubernetes/manifests/kube-scheduler.yaml dest=/srv/kubernetes/manifests/kube-scheduler.yaml
+
+

@@ -17,7 +17,22 @@
   remote_user: core
   roles:
     - defunctzombie.coreos-bootstrap 
-- hosts: coreos-cluster
+- hosts: kubernetes-master
   remote_user: core
+  sudo: yes
+  vars_files:
+    - 'roles/kubernetes-master/vars/vars.yml'
   roles:
-    - test
+    - kubernetes-master
+#- hosts: kubernetes-slave
+#  remote_user: core
+#  roles:
+#    - kubernetes-slave
+
+# DEBUG/TEST with this deployment
+#
+#- hosts: coreos-cluster
+#  remote_user: core
+#  roles:
+#    - debug_role
+

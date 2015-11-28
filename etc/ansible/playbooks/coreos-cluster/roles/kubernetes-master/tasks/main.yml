@@ -1,0 +1,45 @@
+---
+  - name: Create Kubernetes SSL Directory
+    file: path=/etc/kubernetes/ssl state=directory
+
+  - name: Deploy Encrypted Certificate (ca.pem)
+    copy: content={{ ca_pem }} dest=/etc/kubernetes/ssl/ca.pem
+
+  - name: Deploy Encrypted Certificate (apiserver.pem)
+    copy: content={{ apiserver_pem }} dest=/etc/kubernetes/ssl/apiserver.pem
+
+  - name: Deploy Encrypted Certificate (apiserver-key.pem)
+    copy: content={{ apiserver_key_pem }} dest=/etc/kubernetes/ssl/apiserver-key.pem
+
+  - name: Set Ownership and Permissions
+    file: path=/etc/kubernetes/ssl/ owner=root mode=0600
+
+  - name: Deploy Kubernetes Kubelet Service Configuration
+    copy: src=etc/systemd/system/kubelet.service dest=/etc/systemd/system/kubelet.service
+
+  - name: Create /etc Kubernetes Monifests Folder
+    file: path=/etc/kubernetes/manifests state=directory
+
+  - name: Deploy Kubernetes API Server Configuration
+    copy: src=etc/kubernetes/manifests/kube-apiserver.yaml dest=/etc/kubernetes/manifests/kube-apiserver.yaml
+
+  - name: Deploy Kubernetes Kube Proxy Configuration
+    copy: src=etc/kubernetes/manifests/kube-proxy.yaml dest=/etc/kubernetes/manifests/kube-proxy.yaml
+
+  - name: Deploy Kubernetes Kube Podmaster Configuration
+    copy: src=etc/kubernetes/manifests/kube-podmaster.yaml dest=/etc/kubernetes/manifests/kube-podmaster.yaml
+
+  - name: Create /srv Kubernetes Monifests Folder
+    file: path=/srv/kubernetes/manifests state=directory
+
+  - name: Deploy Kubernetes Kube Controller Manager Configuration
+    copy: src=srv/kubernetes/manifests/kube-controller-manager.yaml dest=/srv/kubernetes/manifests/kube-controller-manager.yaml
+
+  - name: Deploy Kubernetes Kube Scheduler Configuration
+    copy: src=srv/kubernetes/manifests/kube-scheduler.yaml dest=/srv/kubernetes/manifests/kube-scheduler.yaml
+
+  - name: Perform Daemon Reload
+    shell: systemctl daemon-reload
+
+  - name: Start Kubelet Service
+    service: name=kubelet state=started enabled=yes

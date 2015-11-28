@@ -1,5 +1,6 @@
 *.vagrant*
 *.key
+*.pem
 *.crt
 .ssh
 vars.yml
