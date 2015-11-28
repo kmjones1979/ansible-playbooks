@@ -1,8 +1,14 @@
-# CoreOS / Kubernetes Ansible Playbook
+# CoreOS / Kubernetes / Vagrant  Playbook
 
-In this playbook I will deploy a 3 server CoreOS / Vagrant / Kubernetes cluster.
+In this README I will give instructions to complete the following:
+ - Setup an Ansible / CentOS Vagrant Box
+ - Setup a CoreOS Vagrant Cluster (3+ nodes)
+ - Deploy a Kubernetes Cluster across each CoreOS server
 
 ### Vagrant Setup
+
+First you will need to setup both an Ansible server to deploy from 
+along with a CoreOS cluster to setup and congigure Kuberenetes.
 
 #### Create Ansible Vagrant Box
 
@@ -16,10 +22,17 @@ $ vagrant init centos/7; vagrant up --provider virtualbox
 Install Ansible and dependencies
 
 ```
+$ vagrant ssh
 $ sudo yum clean all && \
     sudo yum -y install epel-release && \
     sudo yum -y install PyYAML python-jinja2 python-httplib2 python-keyczar python-paramiko python-setuptools git python-pip && \
     sudo pip install ansible && sudo ansible-galaxy install defunctzombie.coreos-bootstrap
+```
+
+You can test Ansible is properly installed by peforming the following...
+```
+$ ansible --version
+$ ansible -m setup localhost
 ```
 
 #### Create CoreOS Vagrant Cluster

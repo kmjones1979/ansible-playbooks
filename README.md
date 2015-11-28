@@ -42,10 +42,6 @@ docker run -i -t --rm \
   --name docker-ansible docker-ansible \
 ```
 
-### Playbooks
-
-Playbooks are located in /etc/ansible/playbooks.
-
 ### SSH Keys
 
 #### Vault encryption
@@ -80,3 +76,10 @@ Then add your Vagrant private key.
 ```
 ssh-add /path/to/private.key
 ```
+
+### Playbooks
+
+[CoreOS / Kubernetes] (https://github.com/kmjones1979/docker-ansible/tree/master/etc/ansible/playbooks/coreos-cluster)
+This playbook will configure Kubernetes on a Vagrant CoreOS cluster
+
+
