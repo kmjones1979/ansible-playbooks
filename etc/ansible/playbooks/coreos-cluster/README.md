@@ -259,10 +259,12 @@ Deploy.
 <sub>Tip: Use the flag -vvvv to troubleshoot Ansible deployment issues</sub>
 ```
 cd etc/ansible/playbooks/coreos-cluster/ 
-ansible-playbook -i inventory/hosts deploy.yml --ask-vault-pass
+ansible-playbook -i inventory/hosts main.yml --ask-vault-pass
 ```
 
 Manually Deploy DNS Add-On (not working in Ansible playbook)
+
+<sub>Note: This should be done on the master node after kubectl has been installed.</sub>
 ```
 kubectl create -f /home/core/dns-addon.yml
 ```
