@@ -1,12 +1,16 @@
 ---
  - name: Drop Private Key
    local_action: copy content={{ ssl_key }} dest=/tmp/insecure_private.key
+   tags: ssh-key
 
  - name: Secure Private Key
    file: path=/tmp/insecure_private.key owner=vagrant mode=0700
+   tags: ssh-key 
 
- - name: Start SSH Agent and Add Private Key
-   shell: eval $(ssh-agent) && ssh-add /tmp/insecure_private.key
-
- #- name: Remove Private Key
- #  shell: shred --iterations=10 -uzfv /tmp/insecure_private.key
+#  Currently these steps need to be performed manually on the Ansible host.
+#
+# - name: Start SSH Agent and Add Private Key
+#   shell: eval $(ssh-agent) && ssh-add /tmp/insecure_private.key
+#
+# - name: Remove Private Key
+#   shell: shred --iterations=10 -uzfv /tmp/insecure_private.key

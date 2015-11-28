@@ -1,72 +1,100 @@
 ---
   - name: Create Kubernetes SSL Directory
     file: path=/etc/kubernetes/ssl state=directory
+    tags: kube-ssl
 
   - name: Deploy Encrypted CA Certificate (ca.pem)
     copy: content={{ ca_pem }} dest=/etc/kubernetes/ssl/ca.pem
+    tags: kube-ssl
 
   - name: Deploy Encrypted API Server Certificate (apiserver.pem)
     copy: content={{ apiserver_pem }} dest=/etc/kubernetes/ssl/apiserver.pem
+    tags: kube-ssl
 
   - name: Deploy Encrypted API Server Key (apiserver-key.pem)
     copy: content={{ apiserver_key_pem }} dest=/etc/kubernetes/ssl/apiserver-key.pem
+    tags: kube-ssl
 
   - name: Set Ownership and Permissions
     file: path=/etc/kubernetes/ssl/ owner=root mode=0600
-
-  - name: Deploy Kubernetes Kubelet Service Configuration
-    template: src=etc/systemd/system/kubelet.service dest=/etc/systemd/system/kubelet.service
-
-  - name: Create /etc Kubernetes Monifests Folder
-    file: path=/etc/kubernetes/manifests state=directory
-
-  - name: Deploy Kubernetes API Server Configuration
-    template: src=etc/kubernetes/manifests/kube-apiserver.yaml dest=/etc/kubernetes/manifests/kube-apiserver.yaml
-
-  - name: Deploy Kubernetes Kube Proxy Configuration
-    copy: src=etc/kubernetes/manifests/kube-proxy.yaml dest=/etc/kubernetes/manifests/kube-proxy.yaml
-
-  - name: Deploy Kubernetes Kube Podmaster Configuration
-    template: src=etc/kubernetes/manifests/kube-podmaster.yaml dest=/etc/kubernetes/manifests/kube-podmaster.yaml
-
-  - name: Create /srv Kubernetes Monifests Folder
-    file: path=/srv/kubernetes/manifests state=directory
-
-  - name: Deploy Kubernetes Kube Controller Manager Configuration
-    copy: src=srv/kubernetes/manifests/kube-controller-manager.yaml dest=/srv/kubernetes/manifests/kube-controller-manager.yaml
-
-  - name: Deploy Kubernetes Kube Scheduler Configuration
-    copy: src=srv/kubernetes/manifests/kube-scheduler.yaml dest=/srv/kubernetes/manifests/kube-scheduler.yaml
-
-  - name: Download Kubernetes kubectl and Make Executable
-    get_url: url=https://storage.googleapis.com/kubernetes-release/release/v1.0.1/bin/linux/amd64/kubectl dest=/opt/bin/kubectl mode=u+x owner=core
-
-  - name: Perform Daemon Reload
-    shell: systemctl daemon-reload
-
-  - name: Start Kubelet Service
-    service: name=kubelet state=started enabled=yes
+    tags: kube-ssl
 
   - name: Deploy Encrypted Admin Certificate (dmin.pem)
     copy: content={{ admin_pem }} dest=/etc/kubernetes/ssl/admin.pem
+    tags: kube-ssl
 
   - name: Deploy Encrypted Admin Key (admin-key.pem)
     copy: content={{ admin_key_pem }} dest=/etc/kubernetes/ssl/admin-key.pem
+    tags: kube-ssl
+
+  - name: Deploy Kubernetes Kubelet Service Configuration
+    template: src=etc/systemd/system/kubelet.service dest=/etc/systemd/system/kubelet.service
+    tags: kube-config
+
+  - name: Create /etc Kubernetes Monifests Folder
+    file: path=/etc/kubernetes/manifests state=directory
+    tags: kube-config
+
+  - name: Deploy Kubernetes API Server Configuration
+    template: src=etc/kubernetes/manifests/kube-apiserver.yaml dest=/etc/kubernetes/manifests/kube-apiserver.yaml
+    tags: kube-config
+
+  - name: Deploy Kubernetes Kube Proxy Configuration
+    copy: src=etc/kubernetes/manifests/kube-proxy.yaml dest=/etc/kubernetes/manifests/kube-proxy.yaml
+    tags: kube-config
+
+  - name: Deploy Kubernetes Kube Podmaster Configuration
+    template: src=etc/kubernetes/manifests/kube-podmaster.yaml dest=/etc/kubernetes/manifests/kube-podmaster.yaml
+    tags: kube-config
+
+  - name: Create /srv Kubernetes Monifests Folder
+    file: path=/srv/kubernetes/manifests state=directory
+    tags: kube-config
+
+  - name: Deploy Kubernetes Kube Controller Manager Configuration
+    copy: src=srv/kubernetes/manifests/kube-controller-manager.yaml dest=/srv/kubernetes/manifests/kube-controller-manager.yaml
+    tags: kube-config
+
+  - name: Deploy Kubernetes Kube Scheduler Configuration
+    copy: src=srv/kubernetes/manifests/kube-scheduler.yaml dest=/srv/kubernetes/manifests/kube-scheduler.yaml
+    tags: kube-config
+
+  - name: Download Kubernetes kubectl and Make Executable
+    get_url: url=https://storage.googleapis.com/kubernetes-release/release/v1.0.1/bin/linux/amd64/kubectl dest=/opt/bin/kubectl mode=u+x owner=core
+    tags: kube-config
+
+  - name: Perform Daemon Reload
+    shell: systemctl daemon-reload
+    tags: kube-config
+
+  - name: Start Kubelet Service
+    service: name=kubelet state=started enabled=yes
+    tags: kube-config
 
   - name: Configure Kubernetes kubectl
     shell: kubectl config set-cluster vagrant --server={{ MASTER_IP }} --certificate-authority={{ CA_CERT }}
+    tags: kube-config
 
   - name: Configure Kubernetes kubectl
     shell: kubectl config set-credentials vagrant-admin --certificate-authority={{ CA_CERT }} --client-key={{ ADMIN_KEY }} --client-certificate={{ ADMIN_CERT }}
+    tags: kube-config
 
   - name: Configure Kubernetes kubectl
     shell: kubectl config set-context vagrant --cluster=vagrant --user=vagrant-admin
+    tags: kube-config
 
   - name: Configure Kubernetes kubectl
     shell: kubectl config use-context vagrant
+    tags: kube-config
 
   - name: Deploy Kubernetes Kube Podmaster Configuration
     template: src=dns-addon.yml dest=/home/core/dns-addon.yml
+    tags: kube-config
 
-  - name: Create DNS using kubectl
-    raw: command kubectl create -f /home/core/dns-addon.yml
+#  Currently these commands need to be performed manually on the Kubernetes master node to enable the DNS add-on
+#
+#  - name: Create DNS using kubectl
+#    shell: kubectl config set-cluster local-server --server=http://localhost:8080
+#
+#  - name: Create DNS using kubectl
+#    shell: kubectl create -f /home/core/dns-addon.yml

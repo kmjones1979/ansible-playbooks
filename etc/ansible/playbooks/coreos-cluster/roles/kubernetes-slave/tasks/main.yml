@@ -1,33 +1,44 @@
 ---
   - name: Create Kubernetes SSL Directory
     file: path=/etc/kubernetes/ssl state=directory
+    tags: kube-ssl
 
   - name: Deploy Encrypted Certificate (ca.pem)
     copy: content={{ ca_pem }} dest=/etc/kubernetes/ssl/ca.pem
+    tags: kube-ssl
 
   - name: Deploy Encrypted Certificate (worker.pem)
     copy: content={{ worker_pem }} dest=/etc/kubernetes/ssl/worker.pem
+    tags: kube-ssl
 
   - name: Deploy Encrypted Certificate (worker-key.pem)
     copy: content={{ worker_key_pem }} dest=/etc/kubernetes/ssl/worker-key.pem
+    tags: kube-ssl
 
   - name: Set Ownership and Permissions
     file: path=/etc/kubernetes/ssl/ owner=root mode=0600
+    tags: kube-ssl
 
   - name: Deploy Kubernetes Kubelet Service Configuration
     template: src=etc/systemd/system/kubelet.service dest=/etc/systemd/system/kubelet.service
+    tags: kube-config
 
   - name: Deploy Kubernetes Worker kubeconfig
     copy: src=etc/kubernetes/worker-kubeconfig.yaml dest=/etc/kubernetes/worker-kubeconfig.yaml
+    tags: kube-config
 
   - name: Create /etc Kubernetes Monifests Folder
     file: path=/etc/kubernetes/manifests state=directory
+    tags: kube-config
 
   - name: Deploy Kubernetes Kube Proxy Configuration
     template: src=etc/kubernetes/manifests/kube-proxy.yaml dest=/etc/kubernetes/manifests/kube-proxy.yaml
+    tags: kube-config
 
   - name: Perform Daemon Reload
     shell: systemctl daemon-reload
+    tags: kube-config
 
   - name: Start Kubelet Service
     service: name=kubelet state=started enabled=yes
+    tags: kube-config
