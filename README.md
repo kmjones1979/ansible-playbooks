@@ -9,6 +9,8 @@ This repository also contains a collection of useful playbooks.
 
 #### Vagrant / CentOS / Ansible Instructions
 
+ - Requires [Vagrant] (https://www.vagrantup.com/downloads.html)
+
 Setup/Build
 ```
 cd /path/to/setup/centos/vm/
@@ -38,6 +40,8 @@ ansible --version
 ```
 
 #### Docker / Ansible Instructions
+
+ - Requires [Docker] (https://www.docker.com/)
 
 Setup/Build
 ```
