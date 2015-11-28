@@ -10,7 +10,7 @@ spec:
     image: gcr.io/google_containers/podmaster:1.1
     command:
     - /podmaster
-    - --etcd-servers=http://172.17.8.101,http://172.17.8.102,http://172.17.8.103
+    - --etcd-servers=http://172.17.8.101:4001,http://172.17.8.102:4001,http://172.17.8.103:4001
     - --key=scheduler
     - --whoami=172.17.8.101
     - --source-file=/src/manifests/kube-scheduler.yaml
@@ -25,7 +25,7 @@ spec:
     image: gcr.io/google_containers/podmaster:1.1
     command:
     - /podmaster
-    - --etcd-servers=${ETCD_ENDPOINTS}
+    - --etcd-servers=http://172.17.8.101:4001,http://172.17.8.102:4001,http://172.17.8.103:4001
     - --key=controller
     - --whoami=${ADVERTISE_IP}
     - --source-file=/src/manifests/kube-controller-manager.yaml

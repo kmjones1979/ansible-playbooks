@@ -12,7 +12,7 @@ spec:
     - /hyperkube
     - apiserver
     - --bind-address=0.0.0.0
-    - --etcd_servers=http://172.17.8.101,http://172.17.8.102,http://172.17.8.103
+    - --etcd_servers=http://172.17.8.101:4001,http://172.17.8.102:4001,http://172.17.8.103:4001
     - --allow-privileged=true
     - --service-cluster-ip-range=10.3.0.0/24
     - --secure_port=443
