@@ -15,19 +15,19 @@
     file: path=/etc/kubernetes/ssl/ owner=root mode=0600
 
   - name: Deploy Kubernetes Kubelet Service Configuration
-    copy: src=etc/systemd/system/kubelet.service dest=/etc/systemd/system/kubelet.service
+    template: src=etc/systemd/system/kubelet.service dest=/etc/systemd/system/kubelet.service
 
   - name: Create /etc Kubernetes Monifests Folder
     file: path=/etc/kubernetes/manifests state=directory
 
   - name: Deploy Kubernetes API Server Configuration
-    copy: src=etc/kubernetes/manifests/kube-apiserver.yaml dest=/etc/kubernetes/manifests/kube-apiserver.yaml
+    template: src=etc/kubernetes/manifests/kube-apiserver.yaml dest=/etc/kubernetes/manifests/kube-apiserver.yaml
 
   - name: Deploy Kubernetes Kube Proxy Configuration
     copy: src=etc/kubernetes/manifests/kube-proxy.yaml dest=/etc/kubernetes/manifests/kube-proxy.yaml
 
   - name: Deploy Kubernetes Kube Podmaster Configuration
-    copy: src=etc/kubernetes/manifests/kube-podmaster.yaml dest=/etc/kubernetes/manifests/kube-podmaster.yaml
+    template: src=etc/kubernetes/manifests/kube-podmaster.yaml dest=/etc/kubernetes/manifests/kube-podmaster.yaml
 
   - name: Create /srv Kubernetes Monifests Folder
     file: path=/srv/kubernetes/manifests state=directory
