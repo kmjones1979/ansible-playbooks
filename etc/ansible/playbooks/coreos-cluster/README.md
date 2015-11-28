@@ -55,6 +55,8 @@ $ cp user-data.sample user-data
 ```
 
 Grab a discovery token.
+
+<sub> Note: if your cluster is larger then 3 change the size accordingly. </sub>
 ```
 $ curl -w "\n" 'https://discovery.etcd.io/new?size=3'
 https://discovery.etcd.io/0e72b94351a613bb8480ef02e2f19e87
@@ -102,7 +104,9 @@ core@core-01 ~ $
 Below are the commands needed to generate SSL certificates for this deployment.
 More details: https://coreos.com/kubernetes/docs/latest/openssl.html
 
-Create a custom OpenSSL configuration
+Create a custom OpenSSL configuration.
+
+<sub>Note: The variables for IP.1 and IP.2 are explained below under "Variables" </sub>
 ```
 # ./openssl.cnf
 
@@ -148,7 +152,7 @@ $ openssl req -new -key admin-key.pem -out admin.csr -subj "/CN=kube-admin"
 $ openssl x509 -req -in admin.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out admin.pem -days 365
 ```
 
-Be sure to encrypt these values or store them in a secure location.
+Be sure to encrypt these values into your Ansible variable configuration and/or store them in a secure location.
 
 ### Variables
 
@@ -210,12 +214,12 @@ ansible_eth1.ipv4.address
 
 ### Ansible Deployment
 
-Clone the repository
+Clone the repository.
 ```
 git clone git@github.com:kmjones1979/docker-ansible.git
 ```
 
-Edit the Ansible hosts file to include inventory.
+Edit the Ansible hosts file to include inventory of your Vagrant CoreOS cluster.
 ```
 vim etc/ansible/playbooks/coreos-cluster/inventory/hosts
 ```
@@ -250,13 +254,14 @@ ansible_python_interpreter="PATH=/home/core/bin:$PATH python"
 ```
 
 Deploy. 
+
 <sub>Tip: Use the flag -vvvv to troubleshoot Ansible deployment issues</sub>
 ```
 cd etc/ansible/playbooks/coreos-cluster/ 
 ansible-playbook -i inventory/hosts deploy.yml --ask-vault-pass
 ```
 
-Manually Deploy DNS Add-On
+Manually Deploy DNS Add-On (not working in Ansible playbook)
 ```
 kubectl create -f /home/core/dns-addon.yml
 ```
