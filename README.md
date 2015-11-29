@@ -1,4 +1,4 @@
-# Ansible in Docker or Vagrant 
+# Ansible Playbooks - Docker and Vagrant
 
 This README contains instructions on setting up either a Docker container or
 Vagrant server running CentOS 7 to deploy via Ansible.
@@ -67,7 +67,7 @@ secrets with Ansible Vault.
 
 #### Vault encryption
 
-To encrypt a file with Ansible vault use the following command. These 
+To encrypt a file with Ansible vault use the following command. These
 should be added to .gitignore as well.
 ```
 ansible-vault encrypt <file>
