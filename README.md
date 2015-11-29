@@ -1,10 +1,10 @@
 # Ansible Playbooks - Docker and Vagrant
 
 This README contains instructions on setting up either a Docker container or
-Vagrant server running CentOS 7 to deploy via Ansible.
+Vagrant server running CentOS 7 to deploy Ansible playbooks.
 
-This repository also contains a collection of useful playbooks.
-
+This repository also contains a collection of useful playbooks. You can find
+a list of each playbook and links to their README below under [Playbooks] (https://github.com/kmjones1979/ansible-playbooks#playbooks).
 ### Setup
 
 #### Vagrant / CentOS / Ansible Instructions
